@@ -91,3 +91,84 @@ var grid1 = new Grid(1.0);
 var grid2 = new Grid(5.0);
 console.log(grid1.calculateDistanceFromOrigin({ x: 3, y: 4 }));
 console.log(grid2.calculateDistanceFromOrigin({ x: 3, y: 4 }));
+// 抽象类
+var Department = /** @class */ (function () {
+    function Department(name) {
+        this.name = name;
+    }
+    Department.prototype.printName = function () {
+        console.log("Department name is " + this.name);
+    };
+    return Department;
+}());
+var AccountingDepartment = /** @class */ (function (_super) {
+    __extends(AccountingDepartment, _super);
+    function AccountingDepartment() {
+        return _super.call(this, 'Accounting') || this;
+    }
+    AccountingDepartment.prototype.printMeeting = function () {
+        console.log('The Accounting Department meets each Monday at 10am');
+    };
+    AccountingDepartment.prototype.getReport = function () {
+        console.log('get Accounting report');
+    };
+    return AccountingDepartment;
+}(Department));
+var department;
+department = new AccountingDepartment();
+department.printMeeting();
+department.printName();
+// this
+var deck = {
+    suits: ['hearts', 'spades', 'clubs', 'diamonds'],
+    cards: Array(52),
+    createCardPicker: function () {
+        var _this = this;
+        return function () {
+            var pickedCard = Math.floor(Math.random() * 52);
+            var pickedSuit = Math.floor(pickedCard / 13);
+            return {
+                suit: _this.suits[pickedSuit],
+                card: pickedCard % 13
+            };
+        };
+    }
+};
+var cardPicker = deck.createCardPicker();
+var pickedCard = cardPicker(); // 全局globle调用函数上下文
+console.log("card: " + pickedCard.card + " of " + pickedCard.suit);
+var Handler = /** @class */ (function () {
+    function Handler() {
+        var _this = this;
+        this.onClickBad = function (e) {
+            _this.type = e.type;
+        };
+    }
+    return Handler;
+}());
+var h = new Handler();
+var uiElement = {
+    addClickListener: function () {
+    }
+};
+uiElement.addClickListener(h.onClickBad);
+var suits = ['hearts', 'spades', 'clubs', 'diamonds'];
+function pickCard(x) {
+    if (Array.isArray(x)) {
+        var pickedCard_1 = Math.floor(Math.random() * x.length);
+        return pickedCard_1;
+    }
+    else if (typeof x === 'number') {
+        var pickedSuit = Math.floor(x / 13);
+        return { suit: suits[pickedSuit], card: x % 13 };
+    }
+}
+var myDeck = [
+    { suit: 'diamonds', card: 2 },
+    { suit: 'spades', card: 10 },
+    { suit: 'hearts', card: 4 }
+];
+var pickedCard1 = myDeck[pickCard(myDeck)];
+console.log('card: ' + pickedCard1.card + ' of ' + pickedCard1.suit);
+var pickedCard2 = pickCard(15);
+console.log('card: ' + pickedCard2.card + ' of ' + pickedCard2.suit);
