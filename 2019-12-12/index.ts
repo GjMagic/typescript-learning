@@ -88,9 +88,81 @@ function createInstance<T extends Animal>(c: new() => T) {
   return new c();
 }
 
-createInstance(Lion).keeper.nameTag;
-createInstance(Bee).keeper.hasMask;
-createInstance(Bee).numLenas;
+/* createInstance(Lion).keeper.nameTag = 'nameTag';
+createInstance(Bee).keeper.hasMask = 'hasMask';
+createInstance(Bee).numLenas = 12; */
 
-// 类型推断
+// 交叉类型: 交叉类型是将多个类型合并为一个类型
+function extend<T, U>(first: T, second: U): T&U { // 交叉类型
+  let result = {} as T&U
+  for(let id in first) {
+    first[id] = result[id]
+  }
 
+  for(let id in second) {
+    if (!result.hasOwnProperty(id)) {
+      second[id] = result[id]
+    }
+  }
+  return result;
+}
+
+class Person {
+  constructor(public name: string) {
+
+  }
+}
+
+interface Loggable {
+  log(): void
+}
+
+class ConsoleLogger implements Loggable {
+  log() {
+    // 
+  }
+}
+
+let jam = extend(new Person('jam'), new ConsoleLogger());
+var n = jam.name;
+jam.log();
+
+// 联合类型: 联合类型表示一个值可以是几种类型之一
+function padLeft(value: string, padding: number | string) {
+  if (typeof padding === 'number') {
+    return Array(padding + 1).join(' ') + value;
+  }
+
+  if (typeof padding === 'string') {
+    return padding + value;
+  }
+  throw new Error(`Expected string or number got ${padding}`);
+}
+
+padLeft('Hello world', 2);
+
+interface Bird {
+  fly()
+  layEgg()
+}
+
+interface Fish {
+  swim()
+  layEgg()
+}
+
+function getSmallPet(): Fish | Bird {
+  return;
+}
+
+let pet = getSmallPet();
+
+if (isFish(pet)) {
+  pet.fly();
+} else {
+  pet.swim();
+}
+
+function isFish(pet: Fish | Bird): pet is Bird {
+  return (pet as Bird).fly !== undefined;
+}
